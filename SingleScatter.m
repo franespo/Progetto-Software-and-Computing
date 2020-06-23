@@ -5,7 +5,7 @@ clear all; close all
 % path. The atmosphere may contain molecules and aerosol.
 % Definition of parameters that don't change in the code
 % g         is Henyey-Greenstein g parameter
-% bt        is Brightness Temperature (BT)ù
+% bt        is Brightness Temperature (BT)
 
 g=0.85;
 bt=5800;    %BT of the Sun
@@ -13,7 +13,7 @@ bt=5800;    %BT of the Sun
 % Definition of parameters that change in the code
 % zena      is the sun zenith angle
 % scata     is the scattering angle
-% maratio   is the ratio of molecules to aerosol scattering at 0.56
+% maratio   is the ratio of molecules to aerosol scattering at 0.56 microns
 % alpha     is the Angstrom coefficient
 
 % Different cases are valuated expressed by job='A#', where # is the number
@@ -30,7 +30,7 @@ job='A0'; zena=40; scata=130; maratio=0; alpha=1;
 % scattering coefficient
 
 wd=0.01;                        % Step in wavelength vector
-iwa=27;                         % wa(iwa)=0.52 microns
+iwa=27;                         % wa(iwa)= 0.52 microns
 
 %wd=0.02; 
 %iwa=6;
@@ -53,7 +53,7 @@ Hv=7.7;                         % Vertical scale height: same for molecular
                                 % scattering coefficient ksa
 
 ksm=tauf./Hv;                   % Rayleigh molecular scattering coefficient    
-ksa=tauf./Hv;                   % Rayleigh aerosol scattering coefficient
+ksa=ksm;                        % Rayleigh aerosol scattering coefficient
 
 ksm(i)=1.1e-3 / wa(i)^4.09;     % Origin unknown
 
@@ -85,8 +85,8 @@ E0(i)=planck * B * mus;         % mus to compute irradiance on a horiz.path
 E0S(i)=E0(i)*Ts(i);
 end
 
-Pmol=0.750*(1 + mu*mu);         % Scattering direction 
-Paer=(1-g^2)/(1+g^2-2*g*mu)^(3/2); % Paer is assumed independent of wavelength
+Pmol=0.750*(1 + mu*mu);             % Scattering direction 
+Paer=(1-g^2)/(1+g^2-2*g*mu)^(3/2);  % Paer is assumed independent of wavelength
 Pt=(Pmol*ksm + Paer*ksa)./(ksm+ksa);
 Th=exp(-tau_h);
 
