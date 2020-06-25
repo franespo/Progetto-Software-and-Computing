@@ -357,7 +357,7 @@ sa = np.size(was)
 # Definition of Total Scattering matrix
 Stot = np.zeros((na,sa))
 
-def ScatteringTot(Mol_scattering,Aer_scattering):
+def ScatteringTot(Mol_scattering,Aer_scattering,j,k):
     """ This function computes the Total Scattering which depends on Molecular
     Scattering and Aerosols Scattering.
     
@@ -372,19 +372,24 @@ def ScatteringTot(Mol_scattering,Aer_scattering):
                 Stot is total scattering which depends on Rayileigh molecular 
                 scattering coefficient and Rayileigh aerosol scattering 
                 coefficient """                 
-    
+            
     for j in range(na):
+        if j < 0:
+            raise ValueError("index must be greater than zero")
         # Molecular scattering
         Ms[j] = 0.750*(1 + ang_mua[j]*ang_mua[j]) 
         # Aerosol scattering     
         As[j] =(1-g**2) / (1+g**2-2*g*ang_mua[j])**(3/2)   
         for k in range(sa):
+            if k < 0:
+                raise ValueError("index must be greater than zero")
             # Total Scattering
-            Stot[j,k] = (Ms[j]*k_mol_scattering[k]
-        + As[j]*k_aer_scattering[k])/(k_mol_scattering[k]+k_aer_scattering[k])
+            Stot[j,k] = (Ms[j]*k_mol_scattering[k]+ 
+                        As[j]*k_aer_scattering[k])/(k_mol_scattering[k]+
+                          k_aer_scattering[k])
     return Stot
 
-Stot = ScatteringTot(Ms,As)
+Stot = ScatteringTot(Ms,As,na,sa)
 
 # Definition of second subplot
 ax = fig.add_subplot(2,1,2)

@@ -5,6 +5,7 @@ Created on Thu Jun 18 11:13:48 2020
 @author: Francesco
 """
 import pytest
+import numpy as np
 import functions as f
 import hypothesis
 from hypothesis import strategies as st
@@ -20,9 +21,8 @@ from hypothesis import given
 @settings(max_examples = 3)
 
 def test_dir_scatteringTot(dir_mol,dir_aer):
-    # Check if output is between 0 and 10
-    assert(f.dir_scatteringTot((dir_mol),(dir_aer))>0 and 
-           f.dir_scatteringTot((dir_mol),(dir_aer)) <10)
+    # Check if output is positive
+    assert(f.dir_scatteringTot((dir_mol),(dir_aer))>0)
     
     # Check if output do not contain negative elements
     assert(len(f.sin.D_tot[0][f.sin.D_tot[0] < 0]) == 0)
@@ -42,7 +42,7 @@ def test_planck(wav,bt,i):
     # Check if output is positive
    assert(f.planck(wav,bt,i)>=0)
    
-   # Tesing with a negative value, the value error is detected
+   # Testing with a negative value, the value error is detected
    with pytest.raises(ValueError):
        f.planck(wav,-1,i)
        
@@ -57,17 +57,16 @@ def test_planck(wav,bt,i):
 # Testing on input value of the function with any floats between 0 and 90. 
 # Three maximum examples.       
     
-@given(st.floats(0,90),st.floats(0,90))
+@given(st.floats(0,90),st.floats(0,90),st.integers(1,1000),st.integers(1,1000))
 @settings(max_examples = 3)
 
-def test_ScatteringTot(Mol_scattering,Aer_scattering):
-    # Check if output is positive
-    assert(f.ScatteringTot(Mol_scattering,Aer_scattering)>0)
-    
-    # Check if output do not contain negative elements
-    assert(len(f.sin.Stot[f.sin.Stot < 0]) == 0)
-    
+def test_ScatteringTot(Mol_scattering,Aer_scattering,j,k):
 
+       # Check if output do not contain negative elements
+       assert(len(f.sin.Stot[f.sin.Stot < 0]) == 0)
+    
+           
+     
 if __name__ == '__main__':
     pass
     

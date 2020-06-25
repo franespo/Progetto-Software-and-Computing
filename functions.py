@@ -43,14 +43,18 @@ def planck(wav,bt,i):
     return intensity
 
 
-def ScatteringTot(Mol_scattering,Aer_scattering):             
+def ScatteringTot(Mol_scattering,Aer_scattering,j,k):             
         for j in range(sin.na):
+            if j < 0:
+                raise ValueError("index must be greater than zero")
             # Molecular scattering
             sin.Ms[j] = 0.750*(1 + sin.ang_mua[j]*sin.ang_mua[j]) 
             # Aerosol scattering     
             sin.As[j] =(1-sin.g**2) / (1+sin.g**2
                   -2*sin.g*sin.ang_mua[j])**(3/2)   
             for k in range(sin.sa):
+                if k < 0:
+                    raise ValueError("index must be greater than zero")
                 # Total Scattering
                 sin.Stot[j,k] = (sin.Ms[j]*sin.k_mol_scattering[k]
                 + sin.As[j]*sin.k_aer_scattering[k])/(sin.k_mol_scattering[k]
