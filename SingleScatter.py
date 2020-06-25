@@ -259,8 +259,8 @@ st0 = str(zena)
 st1 = str(scata)
 s = " "
 ss = ", "
-st00 = s.join(['sz =', st0])
-st11 = s.join(['sa =', st1])
+st00 = s.join(['sun zenith angle =', st0])
+st11 = s.join(['scattering angle =', st1])
 str0 = ss.join([st00,st11])
 
 st0 = str(d)
@@ -285,8 +285,6 @@ ax.plot(wav, k_mol_scattering, 'b-', label='k_mol_scattering', linewidth = 3)
 ax.plot(wav, k_aer_scattering, 'r-', label='k_aer_scattering',linewidth = 3)
 # Definition of subplot title
 plt.title(str0)
-# Definition of x-axis name
-plt.xlabel('Wavelength [micron]')
 # Definition of y-axis name
 plt.ylabel('Scattering coeff. [1/m]')
 # Definition of legend which is on the plot 
@@ -306,10 +304,8 @@ plt.xlabel('Wavelength [micron]')
 plt.ylabel('Optical Path')
 # Definition of legend which is on the plot
 leg = ax.legend()
-# Figure output
-plt.show()
 # Saving figure in the same folder of code
-fig.savefig('fig1.png')
+fig.savefig('Figures/fig1.png')
 
 # Creation of figure 2 with dimension 20x20
 fig = plt.figure(figsize=(20,20))
@@ -402,18 +398,14 @@ ax.semilogy(ang, Stot[:,0], 'k-', label='Stot(0.30)',linewidth = 3)
 ax.semilogy(ang, Stot[:,1], 'g-', label='Stot(0.64)',linewidth = 3)
 # Fifth plot and definition of main properties: semilog y-axis
 ax.semilogy(ang, Stot[:,2], 'm--', label='Stot(1.0)',linewidth = 3)
-# Definition of subplot title
-plt.title(str1)
 # Definition of x-axis name
 plt.xlabel('Scattering angle')
 # Definition of y-axis name
 plt.ylabel('Scattering diagram')
 # Definition of legend which is on the plot 
 leg = ax.legend()
-# Figure output
-plt.show()
 # Saving figure in the same folder of code
-fig.savefig('fig2.png')
+fig.savefig('Figures/fig2.png')
 
 # Creation of figure 3 with dimension 20x20
 fig = plt.figure(figsize=(20,20))
@@ -443,17 +435,13 @@ ax.plot(wav, E0N, 'g-', label='E0N', linewidth = 3)
 ax.plot(wav, E0SN, 'b-', label='E0SN',linewidth = 3)
 # Third plot and definition of main properties
 ax.plot(wav, LN, 'r-', label='LN',linewidth = 3)
-# Definition of subplot title
-plt.title(str1)
 # Definition of x-axis name
 plt.xlabel('Wavelength [micron]')
 # Definition of y-axis name
 plt.ylabel('Relative units')
 # Definition of legend which is on the plot
 leg = ax.legend()
-# Figure output
-plt.show()
 # Saving figure in the same folder of code
-fig.savefig('fig3.png')
+fig.savefig('Figures/fig3.png')
 
 
