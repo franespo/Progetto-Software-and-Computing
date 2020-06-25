@@ -56,6 +56,3 @@ def ScatteringTot(Mol_scattering,Aer_scattering):
                 + sin.As[j]*sin.k_aer_scattering[k])/(sin.k_mol_scattering[k]
                 +sin.k_aer_scattering[k])
         return sin.Stot
-
-
-
