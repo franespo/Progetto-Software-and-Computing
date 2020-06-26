@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jun 19 11:15:55 2020
+# Functions used in SingleScatter.py
 
-@author: Francesco
-"""
+
 import SingleScatter as sin
 import math as m
 

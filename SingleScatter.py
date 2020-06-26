@@ -1,6 +1,6 @@
 # This code is implemented to investigate the single scattering solutions and
-# the "colours" of the light reaching the observer from an horizontal path. The
-# atmosphere may contain molecules and aerosol. 
+# the "colours" of the light reaching the observer from an horizontal path. 
+# The atmosphere may contain molecules and aerosol. 
 
 import numpy as np
 import math as m
@@ -51,7 +51,8 @@ while(True):
         
 while(True):
     try:
-        # The ratio of molecules to aerosol scattering at 0.56 micron(i_wav=26)
+        # The ratio of molecules to aerosol scattering 
+        # at 0.56 micron(i_wav=26)
         maratio = int(input(
                 'Insert ratio of molecules to aerosol scattering "maratio": ')) 
         if(maratio >=0 and maratio <=10):
@@ -110,13 +111,16 @@ k_mol_scattering = tauf_vertical / Hv
 k_aer_scattering = tauf_vertical / Hv                               
 
 # This input is essential to choose which wavelength you want to put through
-# the i-th position of the wavelength matrix 
+# the i-th position of the wavelength matrix
+sent1 = ('Insert value of i_wav that is the i-position of wavelength vector')
+sent2 = (' and must have a value between 0 and n. For the case at 0.56 micron')
+sent3 = (', it is recommanded 26: ') 
 while(True):
     try:
         # i_wav is the i-th position of wavelength matrix: i_wav = 0 
-        # corrispondsto 0.3 micron, i_wav = 1 corrisponds to 0.31 micron, 
+        # corrisponds to 0.3 micron, i_wav = 1 corrisponds to 0.31 micron, 
         # i_wav = 2 corrisponds to 0.32 micron and so on and so forth
-        i_wav =int(input("Insert the value of i_wav that is the i-position of wavelength vector and must have a value between 0 and n. For the case at 0.56 micron, it is recommanded 26: ")) 
+        i_wav =int(input(sent1+sent2+sent3))
         if(i_wav >=0 and i_wav <=n):
             break
         else:
@@ -184,8 +188,9 @@ k_ = 1.38e-23
 nn = 1                        
 
 def planck(wav,bt,i):
-    """ This function computes the monochromatic emittance of a black body at a
-    specific temperature (brightness temperature) and depends on wavelength.
+    """ This function computes the monochromatic emittance of a black body at 
+        a specific temperature (brightness temperature) and depends on 
+        wavelength.
     
     Parameters:
         wav is the wavelength express as a vector
