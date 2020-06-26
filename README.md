@@ -13,17 +13,34 @@ The project code is implemented to investigate the single scattering solutions (
 The atmosphere may contain molecules and aerosol.
 
 # Structure of the code
-1. The code has been implemented to give the opportunity to users to execute different cases which depends on different input values as sun zenith angle, scattering angle, mixing ratio (between molecules and aerosols), Angstrom coefficient and wavelength. Some hints have been added to the first few lines of code but users are free to enter the values they want as long as they are consistent with the problem.  
-2. The output of the code are three different figures saved in the folder [figures](https://github.com/franespo/Progetto-Software-and-Computing/tree/master/Figures). Each figure is composed by two plots and shows the results of implementation. In the first one (fig1.png) are showed how molecular and aerosols scattering coefficients changes with the wavelength and in the second one how the vertical and horizontal optical path change with wavelength considering an observer placed 25 meters away from a completely black object; in the second figure (fig2.png) are showed in the upper plot how the transmittance change in a vertical path and in an horizontal path with wavelength, while in the plot below are showed molecular and aerosol scattering direction and how total scattering direction change at three different wavelengths (0.3, 0.64 and 1 microns); in the last figure (fig3.png) are showed sun radiance E0 at top of atmosphere (TOA), radiance reaching surface layer E0S and radiance reaching the observer L in the upper plot, while below are showed same curves but normalized.
+1. The code has been implemented to give the opportunity to users to execute different cases which depends on different input values as:
+* Sun zenith angle (0-90) is the angle between the zenith and the centre of the Sun's disc;
+* Scattering angle (0-180) is the angle in the scattering plane (defined in turn as the plan formed by the direction of the incident radiation and that of scattered radiation) beetween the direction of propagation of incident e.m. field and the direction of the scattered wave;
+* Mixing ratio (0-10) is the ratio between molecules and aerosols; 
+* Angstrom coefficient (>0); 
+* Wavelength from VIS to NIR (i-th position within the matrix is requested).
+Some hints have been added to the first few lines of code but users are free to enter the values they want as long as they are consistent with the problem.  
+2. The output of the code are summerized in three different figures saved in the folder [figures](https://github.com/franespo/Progetto-Software-and-Computing/tree/master/Figures). Each figure is composed by two plots and shows the results of implementation. In the first one (fig1.png) are showed how molecular and aerosols scattering coefficients changes with the wavelength and in the second one how the vertical and horizontal optical path change with wavelength considering an observer placed 25 meters away from a completely black object; in the second figure (fig2.png) are showed in the upper plot how the transmittance change in a vertical path and in an horizontal path with wavelength, while in the plot below are showed molecular and aerosol scattering direction and how total scattering direction change at three different wavelengths (0.3, 0.64 and 1 microns); in the last figure (fig3.png) are showed sun radiance E0 at top of atmosphere (TOA), radiance reaching surface layer E0S and radiance reaching the observer L in the upper plot, while below are showed same curves but normalized.
 
 ## The project is divided in different files:
 * file [single scatter code](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/SingleScatter.py) contains the code of single scatter implementation. It is essential to ensure that the code turns correctly insert the correct inputs. 
 * file [functions](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/functions.py) contains the main functions used in the code.
-* file [testing](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/testing_functions.py) contains different tests for file functions to ensure that all of them work properly, using hypothesis testing. When launch testing with pytest remember to use '***pytest testing_functions.py --capture = no***'.
+* file [testing](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/testing_functions.py) contains different tests for file functions to ensure that all of them work properly, using hypothesis testing. 
 * file [figures](https://github.com/franespo/Progetto-Software-and-Computing/tree/master/Figures) contains the figures output of the code.
+
+## About testing
+In order to execute properly testing some hints are reported. First of all you need to run testing via pytest:
+ ` ` `
+ pytest testing_functions.py -s
+  ` ` `
+Once lunched, the user is asked to enter the input parameters of the code: any input can be entered as long as it follows the indications in brackets. Testing must be executed in the same folder of the code and functions.
+
 
 An example of figures output is reported below:
 ![fig1](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Figures/fig1.png)
 
+
+Author: Francesco Esposito
+email: francesco.esposito23@studio.unibo.it  
 
 
