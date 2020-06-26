@@ -65,9 +65,4 @@ def test_ScatteringTot(Mol_scattering,Aer_scattering,j,k):
            
      
 if __name__ == '__main__':
-    pass
-    
-    
-    
-    
-    
+    pass    
