@@ -30,6 +30,7 @@ Some hints have been added to the first few lines of code but users are free to 
 
 ## About testing
 In order to execute properly testing some hints are reported. First of all you need to run testing via pytest:
+
 ` ` ` 
 pytest testing_functions.py -s
 ` ` `
@@ -40,8 +41,5 @@ Once lunched, the user is asked to enter the input parameters of the code: any i
 An example of figures output is reported below:
 ![fig1](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Figures/fig1.png)
 
-
-Author: Francesco Esposito.
-email: francesco.esposito23@studio.unibo.it  
 
 
