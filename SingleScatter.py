@@ -30,7 +30,7 @@ bt = 5800
 while(True):
     try:
         # The Sun zenith angle
-        zena = int(input('Insert Sun zenith angle "zena": ')) 
+        zena = int(input('Insert Sun zenith angle "zena" (0-90): ')) 
         if(zena >=0 and zena <=90):
             break
         else:
@@ -41,7 +41,7 @@ while(True):
 while(True):
     try:
         # The scattering angle
-        scata = int(input('Insert scattering angle "scata": ')) 
+        scata = int(input('Insert scattering angle "scata" (0-180): ')) 
         if(scata >=0 and scata <=180):
             break
         else:
@@ -54,7 +54,7 @@ while(True):
         # The ratio of molecules to aerosol scattering 
         # at 0.56 micron(i_wav=26)
         maratio = int(input(
-                'Insert ratio of molecules to aerosol scattering "maratio": ')) 
+                'Insert ratio of molecules to aerosol "maratio"(0-10): ')) 
         if(maratio >=0 and maratio <=10):
             break
         else:
@@ -65,7 +65,7 @@ while(True):
 while(True):
     try:
         # The Angstrom coefficient
-        alpha = int(input('Insert Angstrom coefficient "alpha": '))
+        alpha = int(input('Insert Angstrom coefficient "alpha"(>0): '))
         if(alpha >=0):
             break
         else:
