@@ -1,26 +1,35 @@
-# Functions used in SingleScatter.py
-
+# Functions used in Scatter_Profile.py
 
 import math as m
 import numpy as np
 
 
 def wav_matrix(start_wav,wav_step,final_wav,wavelength_norm):
-    """ This function computes the wavelength vector
+    """ This function computes the wavelength vector and an i-th position of it
     
         INPUT: start_wav is the starting value of wavelength vector
                wav_step is the step value of wavelength vector
                final_wav is the final value of wavelength
+               wavelength_norm is a wavelength value that corrispond to i-th
+               position of wavelength value compute as i_wav
                
-        OUTPUT: wavelength vector       
+        OUTPUT: wavelength vector,       
     """
-    
+    if start_wav < 0:
+        raise ValueError (
+                'The starting value of wavelength must be at least >= 0')
+    if final_wav < 0 and final_wav < start_wav:
+        raise ValueError (
+                'The final value of wavelength must be greater than st. value')
+           
     # Wavelength vector
     wav = np.arange(start_wav,final_wav,wav_step)
     
     # Conversion of wavelength vector in wavelength matrix                                      
     wav = wav.T
     
+    # i-th position of wavelength vector to compute scattering on a specific
+    # wavelength
     i_wav = np.round((wavelength_norm-start_wav)/wav_step)
         
     return wav, i_wav
@@ -34,6 +43,13 @@ def radcos(scata,zena):
         OUTPUT: cosines of scattering and sun zenith angles expressed in 
                 radians
     """
+    if scata < 0 and scata > 180:
+        raise ValueError (
+                'Scattering angle value must be in range [0-180]')
+        
+    if zena < 0 and zena > 90:
+        raise ValueError (
+                'Zenith angle value must be in range [0-90]')
     
     # Cosine of scattering angle expressed in radians 
     ang_mu = np.cos(scata*np.pi/180)            
@@ -51,7 +67,10 @@ def RayOpticaldepth(Hv,wav):
                
         OUTPUT: tau_vertical is the Rayleigh optical depth
     """
-       
+    if Hv < 0:
+        raise ValueError (
+                'Height scale must be positive')
+        
     # Definition of Rayleigh optical depth matrix  
     tau_vertical = np.zeros((np.size(wav)))
     
@@ -145,7 +164,6 @@ def emittance(wav,bt):
     Parameters:
         wav is the wavelength express as a vector
         bt is the brightness temperature
-        i is the index of wavelength vector
         
         Constant:
             c0 is the speed of light in vaccum, 2.997e+8 
