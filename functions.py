@@ -5,15 +5,19 @@ import numpy as np
 
 
 def wav_matrix(start_wav,wav_step,final_wav,wavelength_norm):
-    """ This function computes the wavelength vector and an i-th position of it
     
-        INPUT: start_wav is the starting value of wavelength vector
+    """ This function computes the wavelength vector and an i-th position that
+        corrispond to wavelength_norm, i.e. a specific wavelength of wavelength
+        vetor.
+    
+        INPUT  start_wav is the starting value of wavelength vector
                wav_step is the step value of wavelength vector
-               final_wav is the final value of wavelength
+               final_wav is the final value of wavelength vector
                wavelength_norm is a wavelength value that corrispond to i-th
                position of wavelength value compute as i_wav
                
-        OUTPUT: wavelength vector,       
+        OUTPUT  wavelength vector and i-th value of wavelength vector: 
+                wav,i_wav
     """
     if start_wav < 0:
         raise ValueError (
@@ -35,13 +39,14 @@ def wav_matrix(start_wav,wav_step,final_wav,wavelength_norm):
     return wav, i_wav
 
 def radcos(scata,zena):
-    """ This function computes the cosines of scattering and sun zenith angles
     
-        INPUT: scata is the scattering angle expressed in degrees
+    """ This function computes the cosines of scattering and Sun zenith angles.
+    
+        INPUT  scata is the scattering angle expressed in degrees
                zena is the sun scattering angle expressed in degrees
                
-        OUTPUT: cosines of scattering and sun zenith angles expressed in 
-                radians
+        OUTPUT  cosines of scattering and sun zenith angles expressed in 
+                radians: ang_mu, ang_mus
     """
     if scata < 0 and scata > 180:
         raise ValueError (
@@ -60,16 +65,21 @@ def radcos(scata,zena):
 
 
 def RayOpticaldepth(Hv,wav):
-    """ This function computes the Rayleigh optical depth matrix
+    
+    """ This function computes the Rayleigh optical depth considering 
+        atmosphere with airmass = 1.
         
-        INPUT: Hv is the Vertical scale height
+        INPUT  Hv is the Vertical scale height
                wav is the wavelength vector
                
-        OUTPUT: tau_vertical is the Rayleigh optical depth
+        OUTPUT Rayleigh optical depth: tau_vertical
     """
     if Hv < 0:
         raise ValueError (
                 'Height scale must be positive')
+    if np.size(wav) == 0:
+        raise ValueError (
+                'Size of matrix must be a number at least >0')
         
     # Definition of Rayleigh optical depth matrix  
     tau_vertical = np.zeros((np.size(wav)))
@@ -83,14 +93,20 @@ def RayOpticaldepth(Hv,wav):
     return tau_vertical
 
 def scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio, alpha):
-    """ This function computes the scattering coefficients
+    
+    """ This function computes the scattering coefficients for molecular, 
+        aerosol and total scattering.
         
-        INPUT: tau_vertical is the Rayleigh optical depth
+        INPUT  tau_vertical is the Rayleigh optical depth
                Hv is the Vertical scale height
+               wav is the wavelength vector
+               i_wav is an i-th position of wavelength vector
+               maratio is the ratio of molecules to aerosol scattering at i_wav
+               alpha is the Angstrom coefficient
             
-        OUTPUT: k_mol_scattering, k_aer_scattering and k_tot_scattering
-                are respectively the molecular, aerosol and total scattering
-                coefficients
+        OUTPUT  molecular, aerosol and total scattering coefficients
+                respectively: k_mol_scattering, k_aer_scattering,
+                k_tot_scattering 
     """
     # Rayleigh molecular scattering coefficient 
     k_mol_scattering = tau_vertical / Hv                          
@@ -108,35 +124,39 @@ def scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio, alpha):
     
     return k_mol_scattering, k_aer_scattering, k_tot_scattering
 
-def Opticaldepth(k_tot_scattering,Hv):
+def Opticaldepth(k_tot_scattering,Hv,d):
+    
     """ This function computes the vertical and horizontal optical depth (for
         a path of length d)
     
-        INPUT: k_tot_scattering is the total scattering coefficient
+        INPUT  k_tot_scattering is the total scattering coefficient
                Hv is the Vertical scale height
                d is the distance from observer to black wall expressed in m
                
-        OUTPUT: tau_v and tau_h are respectively the vertical and horizontal 
-                optical depth
+        OUTPUT  the vertical and horizontal optical depth respectively:
+                tau_v, tau_h 
     """
+    if d == 0:
+        raise ValueError (
+                'Distance must be positive, otherwise tau_h is null')        
     # Total vertical optical depth
-    tau_v = Hv*k_tot_scattering      
-    # Distance from observer to black wall [m]   
-    d = 25            
+    tau_v = Hv*k_tot_scattering            
     # Total horizontal optical depth for a path of length d
     tau_h = d*k_tot_scattering     
         
     return tau_v, tau_h
 
 def dir_scatteringTot(tau_vertical,Hv,ang_mu,g):
-    """ This function computes the total scattering direction
     
-    Parameters: 
-        dir_mol is scattering direction of molecules (dir_mol)
-        dir_aer is scattering direction of aerosols (dir_aer)
-        
-        Return:
-            Total scattering direction expressed by a single value """
+    """ This function computes the total scattering direction.
+    
+        INPUT  tau_vertical is Rayleigh Optical depth
+               Hv is the Vertical scale height
+               ang_mu is the cosine of scattering angle
+               g is the Henyey Greenstein parameter
+                      
+        OUTPUT  total scattering direction expressed by: dir_tot[0], dir_tot 
+    """
     # Rayleigh molecular scattering coefficient
     k_mol_scattering = tau_vertical / Hv
     # Rayleigh aerosol scattering coefficient                 
@@ -157,25 +177,20 @@ def dir_scatteringTot(tau_vertical,Hv,ang_mu,g):
 
 
 def emittance(wav,bt):
+    
     """ This function computes the monochromatic emittance of a black body at 
         a specific temperature (brightness temperature) and depends on 
         wavelength.
     
-    Parameters:
-        wav is the wavelength express as a vector
-        bt is the brightness temperature
-        
-        Constant:
-            c0 is the speed of light in vaccum, 2.997e+8 
-            h is Planck constanr, 6.625e-34
-            k_ is Boltzmann constant, 1.38e-23 
-            nn is the refravtive index of the medium, 1
-            
-            Raise:
-                brightness temperature cannot be negative
-                
-                Return:
-                intensity is the monochromatic emittance """  
+        INPUT  wav is the wavelength vector
+               bt is the brightness temperature
+               c0 is the speed of light in vaccum, 2.997e+8 
+               h is Planck constanr, 6.625e-34
+               k_ is Boltzmann constant, 1.38e-23 
+               nn is the refravtive index of the medium, 1
+    
+        OUTPUT  monochromatic emittance of black body: intensity
+    """  
                 
     c0 = 2.997e+8                 # m/s speed of light in vaccum
     h = 6.625e-34                 # J.s Planck constant 
@@ -190,7 +205,16 @@ def emittance(wav,bt):
 
 
 def transmittance(wav,tau_v,tau_h,ang_mus):
-    """ definizione funzione
+    
+    """ This function computes the transmittance and his variation along 
+        horizontal and vertical paths.
+        
+        INPUT  wav is the wavelength vector
+               tau_v is the vertical optical depth
+               tau_h is the horizontal optical depth
+               ang_mus is the cosine of Sun zenith angle
+               
+        OUTPUT  Transmittance values on vertical and horizontal paths: Ts, Th
     """
     
     # Definition of Transmittance matrix on vertical path
@@ -206,7 +230,18 @@ def transmittance(wav,tau_v,tau_h,ang_mus):
     return Ts, Th
 
 def irradiance(wav,wav_step,bt,tau_v,ang_mus):
-    """ descrizione funzione
+    
+    """ This function computes the irradiance reaching two different levels 
+        of atmosphere, that is Top of Atmosphere (TOA) and Surface Layer (SL);
+        Normalized values are also calculated for both irradiances.
+        
+        INPUT  wav is the wavelength vector
+               wav_step is the step value of wavelength vector
+               bt is the brightness temperature
+               tau_v is the vertical optical depth 
+               ang_mus is the cosine of Sun zenith angle
+        
+        OUTPUT irradiances: E0, E0S, E0N, E0SN 
     """
     # Definition of Irradiance matrix reaching Top of Atmosphere (TOA)
     E0 = np.zeros((np.size(wav)))
@@ -233,20 +268,21 @@ def irradiance(wav,wav_step,bt,tau_v,ang_mus):
     return E0, E0S, E0N, E0SN
 
 def ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step,g):
-    """ This function computes the Total Scattering which depends on Molecular
-    Scattering and Aerosols Scattering.
     
-    Parameters:
-        Mol_scattering is the molecular scattering defined by a matrix which 
-        depends on cosine of angle expressed in radians
-        Aer_scattering is the aerosols scattering defined by a matrix which 
-        depends on cosine of angle expressed in radians and on 
-        Henyey-Greenstein g parameter
-                
-                Return:
-                Stot is total scattering which depends on Rayileigh molecular 
-                scattering coefficient and Rayileigh aerosol scattering 
-                coefficient """               
+    """ This function computes the Total Scattering of atmosphere particles
+        which depends on molecular scattering and aerosols scattering.
+        
+        INPUT  k_mol_scattering is the molecular scattering defined 
+               by a matrix that depends on cosine of angle expressed in radians
+               k_aer_scattering is the aerosols scattering defined 
+               by a matrix that depends on cosine of angle expressed in radians
+               and on Henyey-Greenstein g parameter
+               wav is the wavelength vector
+               wav_step is the step value of wavelength vector
+               g is the Henyey Greenstein parameter
+    
+        OUTPUT  total scattering, angle vector and molecular and aerosols 
+                scattering respectively: Stot, angle, Ms, As"""               
     # Definition of angles range (0-180) for x-axis with different steps
     # step for range angle 0-10
     sxstep = 0.5
