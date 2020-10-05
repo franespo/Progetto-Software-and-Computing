@@ -7,7 +7,7 @@ from configparser import ConfigParser
 # Choice of wavelength to compute VISibility and normalise particle scattering 
 # coefficient
 parser = ConfigParser()
-parser.read('Single_scatterConfiguration.ini')
+parser.read('ScatterProfile_Configuration.ini')
 
 start_wav = parser.getfloat('General_Variables', 'starting_wav',
                          fallback = 0.3)
@@ -29,8 +29,10 @@ bt = parser.getfloat('General_Variables', 'BT_of_the_sun',
                          fallback = 5800) 
 Hv = parser.getfloat('General_Variables', 'Vertical_scale_Height',
                          fallback = 7.7) 
-wavelength_norm = parser.getfloat('General_Variables', 'ith_wav',
+wavelength_norm = parser.getfloat('General_Variables', 'wavelength_norm',
                          fallback = 0.52)
+d = parser.getfloat('General_Variables', 'distance_from_black_wall',
+                         fallback = 25)
 
 wav, i_wav = fn.wav_matrix(start_wav,wav_step,final_wav,wavelength_norm)
 
@@ -56,7 +58,7 @@ fig.savefig('FiguresNew/fig1.png')
 # FIGURE 2
 
 k_tot = ktot[2]
-tau = fn.Opticaldepth(k_tot,Hv)
+tau = fn.Opticaldepth(k_tot,Hv,d)
 tau_v = tau[0]
 tau_h = tau[1]
 name_figure = 'Optical Paths'
@@ -77,7 +79,7 @@ angle = fn.radcos(scata,zena)
 transmitt = fn.transmittance(wav,tau_v,tau_h,angle[1])
 Ts = transmitt[0]
 Th  = transmitt[1]
-name_figure = 'Transmittance on two 25 m Paths: vertical and horizontal'
+name_figure = 'Transmittance on vertical and horizontal path (25m)'
 fig = plt.figure()
 plt.plot(wav, Ts, 'b-', label='Transmittance on vertical path', linewidth = 2)   
 plt.plot(wav, Th, 'r-', label='Transimtance on horizontal path', linewidth = 2)
