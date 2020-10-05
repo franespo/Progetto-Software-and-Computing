@@ -13,12 +13,13 @@ config['General_Variables'] = {
     'Henyey_Greenstein_g_parameter' : '0.85',
     'BeightnessTemperature_of_the_sun' : '5800',
     'Vertical_scale_Height' : '7.7',
-    'ith_wav' : '0.52',
+    'wavelength_norm' : '0.52',
+    'distance_from_black_wall' :'25'
     }
 
 config['Output'] = {
-    'output_figures' : './Figures/'}
+    'output_figures' : './FiguresNew/'}
 
-with open('./Single_scatterConfiguration.ini','w') as file:
+with open('./ScatterProfile_Configuration.ini','w') as file:
     config.write(file)
 
