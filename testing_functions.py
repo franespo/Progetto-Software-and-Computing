@@ -82,15 +82,16 @@ def test_RayOpticaldepth(start_wav,wav_step,final_wav,wavelength_norm):
 # Test for scatter_coeff
        
 @given(st.floats(0.1,100),st.floats(0.1,4),st.floats(0.5,1),st.floats(10,15),
-	st.floats(5,9.99),st.floats(0,50),st.floats(0,20))
+       st.floats(5,9.99),st.floats(0,50))
 @settings(max_examples = 20)
 
-def test_scatter_coeff(Hv,start_wav,wav_step,final_wav,wavelength_norm,maratio, alpha):
+def test_scatter_coeff(Hv,start_wav,wav_step,final_wav,wavelength_norm,
+                       maratio):
 
     wav, i_wav = fn.wav_matrix(start_wav,wav_step,final_wav,wavelength_norm)
     tau_vertical = fn.RayOpticaldepth(wav)
-    k_mol_scattering, k_aer_scattering, k_tot_scattering = fn.scatter_coeff(tau_vertical,
-    							Hv,wav,i_wav,maratio, alpha)
+    k_mol_scattering, k_aer_scattering, k_tot_scattering = fn.scatter_coeff(
+            tau_vertical,Hv,wav,i_wav,maratio)
     
     #check if a ValueError arise if Hv is smaller or equal to 0
     with pytest.raises(ValueError):    
@@ -103,7 +104,7 @@ def test_scatter_coeff(Hv,start_wav,wav_step,final_wav,wavelength_norm,maratio, 
 # Test for Opticaldepth
     
 @given(st.floats(0.1,100),st.floats(0,100),st.floats(0.1,4),st.floats(0.5,1),
-	st.floats(10,15),st.floats(5,9.99))
+       st.floats(10,15),st.floats(5,9.99))
 @settings(max_examples = 20)
 
 def test_Opticaldepth(Hv,d,start_wav,wav_step,final_wav,wavelength_norm):
@@ -122,10 +123,11 @@ def test_Opticaldepth(Hv,d,start_wav,wav_step,final_wav,wavelength_norm):
 # Test for dir_scatteringTot
 
 @given(st.floats(0.1,4),st.floats(0.5,1),st.floats(10,15),st.floats(5,9.99),
-	st.floats(0.1,100),st.floats(-1,1))
+       st.floats(0.1,100),st.floats(-1,1))
 @settings(max_examples = 20)
         
-def test_dir_scatteringTot(start_wav,wav_step,final_wav,wavelength_norm,Hv,ang_mu):
+def test_dir_scatteringTot(start_wav,wav_step,final_wav,wavelength_norm,
+                           Hv,ang_mu):
 
     wav, _ = fn.wav_matrix(start_wav,wav_step,final_wav,wavelength_norm)
     tau_vertical = fn.RayOpticaldepth(wav)
@@ -138,7 +140,7 @@ def test_dir_scatteringTot(start_wav,wav_step,final_wav,wavelength_norm,Hv,ang_m
 # Test for emittance
 
 @given(st.floats(0.1,4),st.floats(0.5,1),st.floats(10,15),st.floats(5,9.99),
-	st.floats(1,8000))
+       st.floats(1,8000))
 @settings(max_examples = 20)
 
 def test_emittance(start_wav,wav_step,final_wav,wavelength_norm,bt):
@@ -159,10 +161,11 @@ def test_emittance(start_wav,wav_step,final_wav,wavelength_norm,bt):
 # Test for transmittance
 
 @given(st.floats(0.1,4),st.floats(0.5,1),st.floats(10,15),st.floats(5,9.99),
-	st.floats(0,200),st.floats(0,200),st.floats(0.1,1))
+       st.floats(0,200),st.floats(0,200),st.floats(0.1,1))
 @settings(max_examples = 20)
 
-def test_transmittance(start_wav,wav_step,final_wav,wavelength_norm,tau_v,tau_h,ang_mus):
+def test_transmittance(start_wav,wav_step,final_wav,wavelength_norm,tau_v,
+                       tau_h,ang_mus):
    
    wav, _ = fn.wav_matrix(start_wav,wav_step,final_wav,wavelength_norm) 
    tau_h = np.random.rand(len(wav))
@@ -185,10 +188,11 @@ def test_transmittance(start_wav,wav_step,final_wav,wavelength_norm,tau_v,tau_h,
 # Test for irradiance
    
 @given(st.floats(0.1,4),st.floats(0.5,1),st.floats(10,15),st.floats(5,9.99),
-	st.floats(1,8000),st.floats(0,100), st.floats(0.1,1))
+       st.floats(1,8000),st.floats(0,100), st.floats(0.1,1))
 @settings(max_examples = 20)
 
-def test_irradiance(start_wav,wav_step,final_wav,wavelength_norm,bt,tau_v,ang_mus):
+def test_irradiance(start_wav,wav_step,final_wav,wavelength_norm,bt,tau_v,
+                    ang_mus):
    
    wav, _ = fn.wav_matrix(start_wav,wav_step,final_wav,wavelength_norm)
    tau_v = np.random.rand(len(wav))
@@ -213,7 +217,7 @@ def test_irradiance(start_wav,wav_step,final_wav,wavelength_norm,bt,tau_v,ang_mu
 # Test for ScatteringTot
    
 @given(st.floats(0,100),st.floats(0,100),st.floats(0.1,4),st.floats(0.5,1),
-	st.floats(10,15),st.floats(5,9.99))
+       st.floats(10,15),st.floats(5,9.99))
 @settings(max_examples = 20)
 
 def test_ScatteringTot(k_mol_scattering,k_aer_scattering,start_wav,wav_step,
@@ -223,7 +227,8 @@ def test_ScatteringTot(k_mol_scattering,k_aer_scattering,start_wav,wav_step,
     k_mol_scattering = np.random.rand(len(wav))
     k_aer_scattering = np.random.rand(len(wav))
     
-    Stot, ang, Ms, As = fn.ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step)
+    Stot, ang, Ms, As = fn.ScatteringTot(k_mol_scattering,k_aer_scattering,
+                                         wav,wav_step)
     
     #check if output is positive
     assert(len(Stot[Stot <=0]) == 0)
