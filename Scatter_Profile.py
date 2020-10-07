@@ -20,8 +20,6 @@ maratio = parser.getfloat('General Variables', 'mixing_ratio',
                           fallback = 0)
 wav_step = parser.getfloat('General_Variables', 'wavelength_step',
                          fallback = 0.01) 
-alpha = parser.getfloat('General_Variables', 'angstrom_coefficient_alpha',
-                         fallback = 1) 
 bt = parser.getfloat('General_Variables', 'BT_of_the_sun',
                          fallback = 5800) 
 Hv = parser.getfloat('General_Variables', 'Vertical_scale_Height',
@@ -36,8 +34,7 @@ wav, i_wav = fn.wav_matrix(start_wav,wav_step,final_wav,wavelength_norm)
 
 # FIGURE 1 
 tau_vertical = fn.RayOpticaldepth(wav)
-ktot = fn.scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio
-                        ,alpha)
+ktot = fn.scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio)
 k_m = ktot[0]
 k_a = ktot[1]   
 name_figure = 'Scattering coefficient trend'               

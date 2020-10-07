@@ -92,7 +92,7 @@ def RayOpticaldepth(wav):
         
     return tau_vertical
 
-def scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio, alpha):
+def scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio):
     
     """ This function computes the scattering coefficients for molecular, 
         aerosol and total scattering.
@@ -121,7 +121,9 @@ def scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio, alpha):
     k_tot_scattering = k_mol_scattering + k_aer_scattering
     # Normalize aerosol scattering coefficient using maratio at specific 
     # wavelength 
-        
+    
+    # Angstrom coefficient
+    alpha = 1
     k_aernorm = k_mol_scattering[int(i_wav)]*maratio/wav[int(i_wav)
                 ]**(-alpha)
     for i in range(np.size(wav)):
