@@ -6,7 +6,7 @@ The interaction of electromagnetic radiation with matter modifies to some extent
 
 which indicates the relationship between the dimensions of the scatterer (assumed spherical radius a) and the wavelength incident wave. If the scatterer is excessively small, it does not occur interactions with incident radiation. 
 
-![Scattering regimes](https://images.slideplayer.com/26/8579527/slides/slide_2.jpg) 
+![Scattering regimes](https://www.e-education.psu.edu/meteo300/sites/www.e-education.psu.edu.meteo300/files/images/lesson6/6_13.jpg) 
 
 Generally, in any volume of air, scatterers with different properties (dimensions, type of material) are found. The transfer of radiation through a volume is very dependent on the details of the type, dimension and number of these particles. Generally multiple scattering becomes more important as the number of particles increase. To simulate quantitatively the radiance in a dense media we need to know the properties of the scatterers considered as independent, that is the single scattering properties.
 The project code is implemented to investigate the single scattering solutions (not considered multiple scattering) and the "colours" of the light reaching the observer from an horizontal path. In particular, the light reflected by a black object placed at a certain distance from the observer is analyzed: in the absence of molecules / aerosols between the object and the observer, the latter would observe the object completely black, while the situation changes when there are scatterers in the air. 
