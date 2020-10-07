@@ -22,9 +22,12 @@ def wav_matrix(start_wav,wav_step,final_wav,wavelength_norm):
     if start_wav < 0:
         raise ValueError (
                 'The starting value of wavelength must be at least >= 0')
-    if final_wav < 0 and final_wav < start_wav:
+    if final_wav < 0 or final_wav < start_wav:
         raise ValueError (
-                'The final value of wavelength must be greater than st. value')
+                'The final value of wavelength must be greater than st. value')                
+    if wavelength_norm < start_wav or wavelength_norm > final_wav:
+    	raise ValueError(
+    		'The wavelength_norm value must be between start_wav & final_wav values')
            
     # Wavelength vector
     wav = np.arange(start_wav,final_wav,wav_step)
@@ -34,7 +37,7 @@ def wav_matrix(start_wav,wav_step,final_wav,wavelength_norm):
     
     # i-th position of wavelength vector to compute scattering on a specific
     # wavelength
-    i_wav = np.round((wavelength_norm-start_wav)/wav_step)
+    i_wav = int((wavelength_norm-start_wav)/wav_step)
         
     return wav, i_wav
 
@@ -48,11 +51,11 @@ def radcos(scata,zena):
         OUTPUT  cosines of scattering and sun zenith angles expressed in 
                 radians: ang_mu, ang_mus
     """
-    if scata < 0 and scata > 180:
+    if scata < 0 or scata > 180:
         raise ValueError (
                 'Scattering angle value must be in range [0-180]')
         
-    if zena < 0 and zena > 90:
+    if zena < 0 or zena > 90:
         raise ValueError (
                 'Zenith angle value must be in range [0-90]')
     
@@ -64,27 +67,24 @@ def radcos(scata,zena):
     return ang_mu, ang_mus
 
 
-def RayOpticaldepth(Hv,wav):
+def RayOpticaldepth(wav):
     
     """ This function computes the Rayleigh optical depth considering 
         atmosphere with airmass = 1.
         
-        INPUT  Hv is the Vertical scale height
-               wav is the wavelength vector
+        INPUT  wav is the wavelength vector
                
         OUTPUT Rayleigh optical depth: tau_vertical
     """
-    if Hv < 0:
+    
+    if len(wav) <= 0:
         raise ValueError (
-                'Height scale must be positive')
-    if np.size(wav) == 0:
-        raise ValueError (
-                'Size of matrix must be a number at least >0')
+                'Size of matrix must be a number at least > 0')
         
     # Definition of Rayleigh optical depth matrix  
-    tau_vertical = np.zeros((np.size(wav)))
+    tau_vertical = np.zeros(len(wav))
     
-    for i in range(np.size(wav)):
+    for i in range(len(wav)):
         # Definition of coeff to compute tau_vertical
         coeff = 3.916 + 0.074 * wav[i] + 0.05 / wav[i]
         # Rayleigh optical depth
@@ -108,6 +108,11 @@ def scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio, alpha):
                 respectively: k_mol_scattering, k_aer_scattering,
                 k_tot_scattering 
     """
+    
+    if Hv <= 0:
+    	raise ValueError (
+    		'Hv must be greater then 0')
+    		
     # Rayleigh molecular scattering coefficient 
     k_mol_scattering = tau_vertical / Hv                          
     # Rayleigh aerosol scattering coefficient
@@ -136,7 +141,7 @@ def Opticaldepth(k_tot_scattering,Hv,d):
         OUTPUT  the vertical and horizontal optical depth respectively:
                 tau_v, tau_h 
     """
-    if d == 0:
+    if d < 0:
         raise ValueError (
                 'Distance must be positive, otherwise tau_h is null')        
     # Total vertical optical depth
@@ -146,7 +151,7 @@ def Opticaldepth(k_tot_scattering,Hv,d):
         
     return tau_v, tau_h
 
-def dir_scatteringTot(tau_vertical,Hv,ang_mu,g):
+def dir_scatteringTot(tau_vertical,Hv,ang_mu):
     
     """ This function computes the total scattering direction.
     
@@ -157,6 +162,7 @@ def dir_scatteringTot(tau_vertical,Hv,ang_mu,g):
                       
         OUTPUT  total scattering direction expressed by: dir_tot[0], dir_tot 
     """
+    g = 0.85
     # Rayleigh molecular scattering coefficient
     k_mol_scattering = tau_vertical / Hv
     # Rayleigh aerosol scattering coefficient                 
@@ -170,7 +176,7 @@ def dir_scatteringTot(tau_vertical,Hv,ang_mu,g):
              dir_scattering_aerosol*k_aer_scattering
              )/(k_mol_scattering+k_aer_scattering)
     
-    return dir_tot[0], dir_tot
+    return dir_tot
 
 # Definition of parameters for Planck function
 # Planck function
@@ -267,7 +273,7 @@ def irradiance(wav,wav_step,bt,tau_v,ang_mus):
     E0SN = E0S/E0Smax
     return E0, E0S, E0N, E0SN
 
-def ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step,g):
+def ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step):
     
     """ This function computes the Total Scattering of atmosphere particles
         which depends on molecular scattering and aerosols scattering.
@@ -282,7 +288,9 @@ def ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step,g):
                g is the Henyey Greenstein parameter
     
         OUTPUT  total scattering, angle vector and molecular and aerosols 
-                scattering respectively: Stot, angle, Ms, As"""               
+                scattering respectively: Stot, angle, Ms, As"""  
+    
+    g = 0.85                         
     # Definition of angles range (0-180) for x-axis with different steps
     # step for range angle 0-10
     sxstep = 0.5
@@ -296,7 +304,7 @@ def ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step,g):
     ang = np.concatenate((ang1,ang2),axis=0)
     # Definition of raw size matrix angle
     na = np.size(ang)
-    # Definition of angle matrix formed by the cosine of the values ​​of the angle 
+    # Definition of angle matrix formed by the cosine of the values â€‹â€‹of the angle 
     # vector ang expressed in radians
     ang_mua = np.zeros((na,1))
     for i in range(na):
