@@ -10,7 +10,6 @@ config['General_Variables'] = {
     'mixing_ratio' : '0',
     'wavelength_step' : '0.01',
     'angstrom_coefficient_alpha' : '1',
-    'Henyey_Greenstein_g_parameter' : '0.85',
     'BeightnessTemperature_of_the_sun' : '5800',
     'Vertical_scale_Height' : '7.7',
     'wavelength_norm' : '0.52',
