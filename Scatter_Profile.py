@@ -1,4 +1,3 @@
-
 import matplotlib.pyplot as plt
 import functions as fn
 from configparser import ConfigParser
@@ -23,8 +22,6 @@ wav_step = parser.getfloat('General_Variables', 'wavelength_step',
                          fallback = 0.01) 
 alpha = parser.getfloat('General_Variables', 'angstrom_coefficient_alpha',
                          fallback = 1) 
-g = parser.getfloat('General_Variables', 'Henyey_Greenstein_g_parameter',
-                         fallback = 0.85) 
 bt = parser.getfloat('General_Variables', 'BT_of_the_sun',
                          fallback = 5800) 
 Hv = parser.getfloat('General_Variables', 'Vertical_scale_Height',
@@ -38,7 +35,7 @@ wav, i_wav = fn.wav_matrix(start_wav,wav_step,final_wav,wavelength_norm)
 
 
 # FIGURE 1 
-tau_vertical = fn.RayOpticaldepth(Hv,wav)
+tau_vertical = fn.RayOpticaldepth(wav)
 ktot = fn.scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio
                         ,alpha)
 k_m = ktot[0]
@@ -53,7 +50,7 @@ plt.xlabel('Wavelength [micron]')
 # Definition of legend which is on the plot 
 leg = plt.legend()
 # Saving figure in the same folder of code
-fig.savefig('FiguresNew/fig1.png') 
+fig.savefig('FiguresNew/Scattering coefficient trend.png') 
 
 # FIGURE 2
 
@@ -71,7 +68,7 @@ plt.xlabel('Wavelength [micron]')
 # Definition of legend which is on the plot 
 leg = plt.legend()
 # Saving figure in the same folder of code
-fig.savefig('FiguresNew/fig2.png') 
+fig.savefig('FiguresNew/Optical Paths.png') 
 
 # FIGURE 3
 
@@ -89,12 +86,12 @@ plt.xlabel('Wavelength [micron]')
 # Definition of legend which is on the plot 
 leg = plt.legend()
 # Saving figure in the same folder of code
-fig.savefig('FiguresNew/fig3.png') 
+fig.savefig('FiguresNew/Transmittance.png') 
 
 
 # FIGURE 4
 
-Stot = fn.ScatteringTot(k_m,k_a,wav,wav_step,g)
+Stot = fn.ScatteringTot(k_m,k_a,wav,wav_step)
 ch = Stot[0]
 name_figure = 'Scattering diagram'
 fig = plt.figure()
@@ -114,7 +111,7 @@ plt.ylabel('Scattering diagram')
 # Definition of legend which is on the plot 
 leg = plt.legend()
 # Saving figure in the same folder of code
-fig.savefig('FiguresNew/fig4.png')
+fig.savefig('FiguresNew/Scattering diagram.png')
 
 # FIGURE 5
 
@@ -129,7 +126,7 @@ plt.ylabel('Irradiance')
 # Definition of legend which is on the plot 
 leg = plt.legend()
 # Saving figure in the same folder of code
-fig.savefig('FiguresNew/fig5.png')
+fig.savefig('FiguresNew/Irradiances.png')
 
 # FIGURE 6
 name_figure = 'Normalized Irradiances'
@@ -142,16 +139,5 @@ plt.ylabel('Relative Units')
 # Definition of legend which is on the plot 
 leg = plt.legend()
 # Saving figure in the same folder of code
-fig.savefig('FiguresNew/fig6.png')
-
-
-        
-
-    
-
-    
-    
-    
-    
-    
+fig.savefig('FiguresNew/Normalized Irradiances.png')
     
