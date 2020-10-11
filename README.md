@@ -20,8 +20,8 @@ The atmosphere may contain molecules and aerosol.
 * **scattering_angle** *(0-180°)* is the angle in the scattering plane (defined in turn as the plan formed by the direction of the incident radiation and that of scattered radiation) beetween the direction of propagation of incident e.m. field and the direction of the scattered wave;
 *  **mixing_ratio** is the ratio between molecules and aerosols;
 *  **wavelength_step** is the step with which the wavelength vector is constructed;
-* **BrightnessTemperature_of_the_sun** represents the temperature of a black body, in this case the sun. Its value must be greater then zero.
-* **Vertical_scale_Height** is vertical distance over which the density and pressure fall by a factor of 1/e and describe the atmosphere. Its value is expressed in kilometers and is fundamental for calculation of optical paths;
+* **brightnessTemperature_of_the_sun** represents the temperature of a black body, in this case the sun. Its value must be greater then zero.
+* **vertical_scale_Height** is vertical distance over which the density and pressure fall by a factor of 1/e and describe the atmosphere. Its value is expressed in kilometers and is fundamental for calculation of optical paths;
 * **wavelength_norm** represents a specific value in the range of wavelength vector expressed in microns;
 * **distance_from_black_wall** is the distance from observer used for scattering analysis.
 
@@ -33,18 +33,18 @@ Lastly, [Transmittance.png](https://github.com/franespo/Progetto-Software-and-Co
 
 ## The project is divided in different files:
 * [FiguresNew](https://github.com/franespo/Progetto-Software-and-Computing/tree/master/FiguresNew) contains the figures output of the code;
-* [Configuration_maker.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Configuration_maker.py) contains the parameters used in the code and can be modified before running the code.
+* [Configuration_maker.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Configuration_maker.py) contains the parameters used in the code.
 * [README.md](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/README.md) contains the instructions on how use the code;
-* [ScatterProfile_Configuration.ini] contains the output of Configuration_maker.py and this file change respect to the modifies applied;
-* [Scatter_Profile.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Scatter_Profile.py) is the core of the code;
+* [ScatterProfile_Configuration.ini](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/ScatterProfile_Configuration.ini) contains the output of Configuration_maker.py and it can be modified with the input that users wants to use in the code;
+* [Scatter_Profile.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Scatter_Profile.py) is the core of the code and it is the file to be launched;
 * file [functions](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/functions.py) contains the main functions used in the code;
 * file [testing_functions.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/testing_functions.py) contains different tests for file functions to ensure that all of them work properly.
 
 ## How to run the code
 In order to run properly the code, this steps can be followed:
 1. The folder containing the code can be downloaded to this link: https://github.com/franespo/Progetto-Software-and-Computing.git 
-2. The user can use the code running the file [Scatter_Profile.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Scatter_Profile.py) with python via terminal;
-3. If the user wants, can modify the input values in the [Configuration_maker.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Configuration_maker.py) file and launch it before execution of step 2.
+2. The user can use the code running file [Scatter_Profile.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Scatter_Profile.py) with python via terminal;
+3. If the user wants, can modify the input values in the [ScatterProfile_Configuration.ini](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/ScatterProfile_Configuration.ini) file and launch it before execution of step 2.
 
 An example of figure output is reported below:
 
