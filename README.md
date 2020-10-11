@@ -13,7 +13,7 @@ The project code is implemented to investigate the single scattering solutions (
 The atmosphere may contain molecules and aerosol.
 
 # Structure of the code
-1. The code has been implemented to give the opportunity to users to execute different cases which depends on different input values. The input values can be modified in the file [Configuration_maker.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Configuration_maker.py) and the variables are shown below:
+1. The code has been implemented to give the opportunity to users to execute different cases which depends on different input values. [Configuration_maker.py](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/Configuration_maker.py) generates the file [ScatterProfile_Configuration.ini](https://github.com/franespo/Progetto-Software-and-Computing/blob/master/ScatterProfile_Configuration.ini) where the variables can be modified: these last are shown below:
 * **starting_wav** represents the starting value of wavelength vector (supposed to be measured in microns), essential for the correct functioning of the code. The value must be positive and greater then zero;
 * **final_wav** represents the final value of wavelength vector (in microns). The value must be positive, greater then zero and also the starting value;
 * **zenith_angle** *(0-90°)* is the angle between the zenith and the centre of the Sun's disc. It's important for the calculation of the irradiance;
