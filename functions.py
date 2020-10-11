@@ -27,7 +27,7 @@ def wav_matrix(start_wav,wav_step,final_wav,wavelength_norm):
                 'The final value of wavelength must be greater than st. value')                
     if wavelength_norm < start_wav or wavelength_norm > final_wav:
     	raise ValueError(
-    		'The wavelength_norm value must be between start_wav & final_wav values')
+    		'The wavelength_norm value must be between st_wav & fi_wav values')
            
     # Wavelength vector
     wav = np.arange(start_wav,final_wav,wav_step)
@@ -76,18 +76,17 @@ def RayOpticaldepth(wav):
                
         OUTPUT Rayleigh optical depth: tau_vertical
     """
-    
-    if len(wav) <= 0:
-        raise ValueError (
-                'Size of matrix must be a number at least > 0')
-        
     # Definition of Rayleigh optical depth matrix  
     tau_vertical = np.zeros(len(wav))
     
     for i in range(len(wav)):
+        if i < 0:
+            raise ValueError('index must be greater than zero')
         # Definition of coeff to compute tau_vertical
         coeff = 3.916 + 0.074 * wav[i] + 0.05 / wav[i]
-        # Rayleigh optical depth
+        if coeff < 0:
+             raise ValueError('coeff must be greater or eqaul to zero')
+        # Rayleigh optical depth     
         tau_vertical[i] = 8.38e-3 / wav[i]**coeff
         
     return tau_vertical
@@ -119,14 +118,22 @@ def scatter_coeff(tau_vertical,Hv,wav,i_wav,maratio):
     k_aer_scattering = tau_vertical / Hv  
     # Total scattering coefficient                             
     k_tot_scattering = k_mol_scattering + k_aer_scattering
-    # Normalize aerosol scattering coefficient using maratio at specific 
-    # wavelength 
     
     # Angstrom coefficient
     alpha = 1
+    # Normalize aerosol scattering coefficient using maratio at specific 
+    # wavelength
+    
+    if maratio < 0:
+    	raise ValueError(
+    		'maratio must be greather then 0')
+    		 
     k_aernorm = k_mol_scattering[int(i_wav)]*maratio/wav[int(i_wav)
                 ]**(-alpha)
     for i in range(np.size(wav)):
+        if i < 0:
+           raise ValueError('index must be greater than zero')
+           
         k_aer_scattering[i] = k_aernorm * wav[i]**(-alpha)
     
     return k_mol_scattering, k_aer_scattering, k_tot_scattering
@@ -143,9 +150,12 @@ def Opticaldepth(k_tot_scattering,Hv,d):
         OUTPUT  the vertical and horizontal optical depth respectively:
                 tau_v, tau_h 
     """
-    if d < 0:
+    if d <= 0:
         raise ValueError (
-                'Distance must be positive, otherwise tau_h is null')        
+                'Distance must be positive, otherwise tau_h is null') 
+    if Hv <= 0:
+    	raise ValueError (
+    		'Hv must be greater then 0')      
     # Total vertical optical depth
     tau_v = Hv*k_tot_scattering            
     # Total horizontal optical depth for a path of length d
@@ -165,6 +175,14 @@ def dir_scatteringTot(tau_vertical,Hv,ang_mu):
         OUTPUT  total scattering direction expressed by: dir_tot[0], dir_tot 
     """
     g = 0.85
+    
+    if Hv <= 0:
+    	raise ValueError (
+    		'Hv must be greater then 0') 
+    if ang_mu < -1 or ang_mu > 1:
+    	raise ValueError (
+    	        'cosine ang_mu must have value in range -1 to +1')
+    	        
     # Rayleigh molecular scattering coefficient
     k_mol_scattering = tau_vertical / Hv
     # Rayleigh aerosol scattering coefficient                 
@@ -206,7 +224,7 @@ def emittance(wav,bt):
     nn = 1        
     
     if bt <= 0:
-        raise ValueError("bt must to be greater than zero")
+        raise ValueError('bt must to be greater than zero')
     intensity = (((2*np.pi*h*(c0**2))/(wav**5))*(
                         1/(np.exp((h*c0)/(kb*wav*bt))-1)))*nn**(-2)
     return intensity
@@ -231,6 +249,11 @@ def transmittance(wav,tau_v,tau_h,ang_mus):
     Th = np.zeros((np.size(wav)))
        
     for i  in range((np.size(wav))):
+        if i < 0:
+           raise ValueError('index must be greater than zero')
+        if ang_mus < -1 or ang_mus > 1:
+           raise ValueError(
+    	           'cosine ang_mus must have value in range -1 to +1')  
         # Transmittance on vertical path
         Ts[i] = np.exp(-tau_v[i]/ang_mus)
         # Transmittance on horizontal path
@@ -260,10 +283,16 @@ def irradiance(wav,wav_step,bt,tau_v,ang_mus):
     
     # Coefficient to compute the irradiance on a horizontal path
     B = 1.0e-06       
-                 
+    if bt <= 0:
+        raise ValueError('bt must to be greater than zero')            
     for i  in range(np.size(wav)):
+        if i < 0:
+           raise ValueError('index must be greater than zero')
         # Irradiance reaching TOA
         E0[i] = emittance(wav[i],bt) * B * ang_mus
+        if ang_mus < -1 or ang_mus > 1:
+           raise ValueError(
+    	            'cosine ang_mus must have value in range -1 to +1')
         # Transmittance on vertical path
         Ts[i] = np.exp(-tau_v[i]/ang_mus)
         # Irradiance reaching SL
@@ -294,11 +323,11 @@ def ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step):
     
     g = 0.85                         
     # Definition of angles range (0-180) for x-axis with different steps
-    # step for range angle 0-10
+    # Step for range angle 0-10
     sxstep = 0.5
     # Definiton of angle vector 1
     ang1 = np.arange(0,10.1,sxstep)
-    # step for range angle 10-180
+    # Step for range angle 10-180
     dxstep = 5
     # Definition of angle vector 2
     ang2 = np.arange(11,182,dxstep)
@@ -306,13 +335,16 @@ def ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step):
     ang = np.concatenate((ang1,ang2),axis=0)
     # Definition of raw size matrix angle
     na = np.size(ang)
-    # Definition of angle matrix formed by the cosine of the values â€‹â€‹of the angle 
+    # Definition of angle matrix formed by the cosine of the values of the angle 
     # vector ang expressed in radians
     ang_mua = np.zeros((na,1))
+    if na < 0:
+       raise ValueError('size of ang cannot be negative')
     for i in range(na):
+        if i < 0:
+           raise ValueError('index must be greater than zero')
         # New angle matrix
         ang_mua[i] = m.cos(ang[i]*(m.pi/180))
-    
     # Definition of a list
     was = [1, m.floor(np.size(wav)/2), np.size(wav)]
     # For scattering direction plot
@@ -327,16 +359,19 @@ def ScatteringTot(k_mol_scattering,k_aer_scattering,wav,wav_step):
 
     for j in range(na):
         if j < 0:
-            raise ValueError("index must be greater than zero")
+            raise ValueError('index must be greater than zero')
         # Molecular scattering
         Ms[j] = 0.750*(1 + ang_mua[j]*ang_mua[j]) 
         # Aerosol scattering     
         As[j] =(1-g**2) / (1+g**2-2*g*ang_mua[j])**(3/2)   
         for k in range(sa):
             if k < 0:
-                raise ValueError("index must be greater than zero")
+                raise ValueError('index must be greater than zero')
             # Total Scattering
             Stot[j,k] = (Ms[j]*k_mol_scattering[k]+ 
                         As[j]*k_aer_scattering[k])/(k_mol_scattering[k]+
                           k_aer_scattering[k])
     return Stot, ang, Ms, As
+    
+    
+    
