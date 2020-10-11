@@ -1,3 +1,4 @@
+
 import matplotlib.pyplot as plt
 import functions as fn
 from configparser import ConfigParser
@@ -16,13 +17,15 @@ zena = parser.getfloat('General_Variables', 'zenith_angle',
                          fallback = 40) 
 scata = parser.getfloat('General_Variables', 'scattering_angle',
                          fallback = 130) 
-maratio = parser.getfloat('General Variables', 'mixing_ratio',
+maratio = parser.getfloat('General_Variables', 'mixing_ratio',
                           fallback = 0)
 wav_step = parser.getfloat('General_Variables', 'wavelength_step',
                          fallback = 0.01) 
-bt = parser.getfloat('General_Variables', 'BT_of_the_sun',
+alpha = parser.getfloat('General_Variables', 'angstrom_coefficient_alpha',
+                         fallback = 1) 
+bt = parser.getfloat('General_Variables', 'brightnesstemperature_of_the_sun',
                          fallback = 5800) 
-Hv = parser.getfloat('General_Variables', 'Vertical_scale_Height',
+Hv = parser.getfloat('General_Variables', 'vertical_scale_Height',
                          fallback = 7.7) 
 wavelength_norm = parser.getfloat('General_Variables', 'wavelength_norm',
                          fallback = 0.52)
@@ -104,7 +107,7 @@ plt.semilogy(Stot[1], ch[:,1], 'g-', label='Stot(0.64)',linewidth = 3)
 plt.semilogy(Stot[1], ch[:,2], 'm--', label='Stot(1.0)',linewidth = 3)
 fig.suptitle(name_figure)
 plt.xlabel('Scattering angle')
-plt.ylabel('Scattering diagram')
+plt.ylabel('Scattering phase')
 # Definition of legend which is on the plot 
 leg = plt.legend()
 # Saving figure in the same folder of code
